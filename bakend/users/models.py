@@ -61,9 +61,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     created = models.DateField(auto_now_add=True)
     favorites = models.ManyToManyField(Post,related_name='profile',blank=True)
     _picture = models.ImageField(upload_to='maps', verbose_name='Picture',null=True,blank=True)
-
+    birthday = models.DateField(null=True, blank=True)
     objects = CustomAccountManager()
-
+    location = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['user_name',]
 

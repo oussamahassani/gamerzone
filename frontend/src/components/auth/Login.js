@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import { ReactComponent as Svg } from '../assests/svg/PeopleConnect2.svg';
+import { ReactComponent as Svg } from '../assests/svg/logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
-  svg:{
-    position:'relative',
-    minHeight:300,
-    minWidth:300,
+  svg: {
+    position: 'relative',
+    minHeight: 300,
+    minWidth: 300,
     maxWidth: '30%',
-     maxHeight: '30%',
-     marginTop:80,
-     marginLeft:80
+    maxHeight: '30%',
+    marginTop: 80,
+    marginLeft: 80
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -47,130 +47,131 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Login() {
-  const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
-  const token =localStorage.getItem('token');
+  const BASE_URL_HTTP = process.env.REACT_APP_BASE_URL_HTPP;
+  const token = localStorage.getItem('token');
   const [condition, setCondition] = useState();
-  var l =0
-  if(token===null){
-    l=0
+  var l = 0
+  if (token === null) {
+    l = 0
   }
-  else{
-    l=token.length
+  else {
+    l = token.length
   }
-  
-  useEffect(() =>{
-    
-   if (l===0){
-    setCondition(false)
-   }
-  else{
-    setCondition(true)
-  }
-  if (condition){
-      window.location.replace('/home')  
-  } }, [token, condition, l]); 
-  
+
+  useEffect(() => {
+
+    if (l === 0) {
+      setCondition(false)
+    }
+    else {
+      setCondition(true)
+    }
+    if (condition) {
+      window.location.replace('/home')
+    }
+  }, [token, condition, l]);
+
 
 
 
   const classes = useStyles();
-  const[email,setEmail]=useState('');
+  const [email, setEmail] = useState('');
   const [password, setPass] = useState('');
 
-  
+
 
   function signIn() {
     axios.post(`${BASE_URL_HTTP}/user/token`, {
-        username: email,
-        password:password,
-        headers: { 
-          xsrfCookieName: 'XSRF-TOKEN',
-          xsrfHeaderName: 'X-XSRF-TOKEN',
-        }
-      })
+      username: email,
+      password: password,
+      headers: {
+        xsrfCookieName: 'XSRF-TOKEN',
+        xsrfHeaderName: 'X-XSRF-TOKEN',
+      }
+    })
       .then((response) => {
-        if (response.data){
+        if (response.data) {
           localStorage.setItem('token', response.data.token);
-             window.location.replace('/home') 
+          window.location.replace('/home')
         }
-        else{
-            alert("Invalid username or password")
+        else {
+          alert("Invalid username or password")
         }
-      },(error) => {
-        if (error.response){
+      }, (error) => {
+        if (error.response) {
 
           alert("Invalid username or password")
-          
-          }else if(error.request){
-          
-            alert("Invalid username or password")
-          
-          }else if(error.message){
-          
-            alert("Invalid username or password")
-          
-          }
+
+        } else if (error.request) {
+
+          alert("Invalid username or password")
+
+        } else if (error.message) {
+
+          alert("Invalid username or password")
+
+        }
       });
 
-}
+  }
 
   return (
-    <div  style={{display:'flex'}} >
-     {window.innerWidth >700 && <Svg className={classes.svg}/>}
-    <div className='container' component="main">
-      <CssBaseline />
-      <div className={classes.paper}>
-      {window.innerWidth <700 && <Svg style={{maxHeight:'40vh',maxWidth:'40vw'}}/>}
-        <Avatar className={classes.avatar}>
-        <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoFocus
-            onChange={event => setEmail(event.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={event => setPass(event.target.value)}
-          />
-        
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={()=>signIn()}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+    <div style={{ display: 'flex' }}  >
+      {window.innerWidth > 700 && <Svg className={classes.svg} />}
+      <div className='container' component="main">
+        <CssBaseline />
+        <div className={classes.paper}>
+          {window.innerWidth < 700 && <Svg style={{ maxHeight: '40vh', maxWidth: '40vw' }} />}
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoFocus
+              onChange={event => setEmail(event.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={event => setPass(event.target.value)}
+            />
+
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={() => signIn()}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
