@@ -40,6 +40,11 @@ INSTALLED_APPS = [
     'users',
     'chats',
     'todo',
+    'saved',
+    'dashboard',
+    'story',
+    'groups',
+    'reports'
 
 
 ]
