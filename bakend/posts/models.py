@@ -36,7 +36,7 @@ class Tag(models.Model):
 class Post(models.Model):
 	title = models.TextField(max_length=150,blank=True, verbose_name='title')
 	id = models.AutoField(primary_key=True, editable=False)
-	Image =  models.ImageField(upload_to='maps', blank=True, null=True, verbose_name='Image')
+	Image =  models.ImageField( upload_to='post', blank=True, null=True, verbose_name='Image')
 	caption = models.TextField(max_length=1500,blank=True, verbose_name='Caption')
 	posted = models.DateTimeField(auto_now_add=True)
 	tags = models.ManyToManyField(Tag, related_name='tags')
