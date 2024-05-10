@@ -169,7 +169,7 @@ const sendcomment =(e) =>{
               <CardContent>
               <div className="Post-image">
               <div>
-                  {post&&< img src={post.Image}style={{ width:"100%",height:'100%'}}/>}
+                  {post&&< img src={BASE_URL_HTTP + "/"+post.Image}style={{ width:"100%",height:'100%'}}/>}
               </div>
                   
                   <div className="Post-caption">

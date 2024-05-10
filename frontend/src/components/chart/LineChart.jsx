@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+import Typography from '@material-ui/core/Typography';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -53,7 +52,6 @@ const data = [
 
 
 export default function Chart() {
-  const theme = useTheme();
 
   return (
     <React.Fragment>

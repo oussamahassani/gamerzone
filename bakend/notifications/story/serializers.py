@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 from users.models import User
 from .models import Story
 
@@ -10,7 +10,7 @@ class StorySerializer(serializers.ModelSerializer):
 
 
 class StorySerializer_GET(serializers.ModelSerializer):
-    user =  UserSerializer()
+    user =  CustomUserSerializer()
     class Meta:
         model = Story
         fields = '__all__'

@@ -1,9 +1,7 @@
-import { connect } from 'react-redux';
-import { updateFormData } from '../../redux/actions';
-import './featuredchart.scss';
+import './featuredchart.css';
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
-import Typography from '@mui/material/Typography';
+import Typography from '@material-ui/core/Typography';
 
 const FeaturedChart = ({ updateFormData }) => {
 
@@ -51,4 +49,4 @@ const FeaturedChart = ({ updateFormData }) => {
   
 
 
-export default connect(null, { updateFormData })(FeaturedChart);
+export default FeaturedChart;

@@ -1,11 +1,11 @@
 from django.forms import ValidationError
 from django.shortcuts import render
-from notifications.models import Notifications
+from notifications.models import Notification
 from groups.serializers import GroupSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import  status 
 from rest_framework.response import Response
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 from .serializers import AdminIdSerializer, GroupPostSerializer, GroupPostSerializer_GET,  GroupSerializer ,GroupSerializer_Get
 from .models import Group, GroupPost,User
 from rest_framework.views import APIView
@@ -63,7 +63,7 @@ class GroupMembersView(APIView):
         group = get_object_or_404(Group, pk=pk)
         group.members.add(request.user)
 
-        Notifications.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
+        Notification.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
 
         return Response({'message': 'Joined group successfully'})
     
@@ -75,7 +75,7 @@ class GroupMembersView(APIView):
     def get(self, request, pk, *args, **kwargs):
         group = get_object_or_404(Group, pk=pk)
         members = group.members.all()
-        serializer = UserSerializer(members, many=True)
+        serializer = CustomUserSerializer(members, many=True)
         return Response({'members': serializer.data})
 
 
@@ -102,7 +102,7 @@ class AddGroupAdminView(APIView):
 
         group.admin.add(admin_id)
         admin_user = User.objects.get(pk=admin_id)
-        Notifications.objects.create(user=admin_user, notf=f"{request.user.name} has invited you to be the {group.name} group admin.")
+        Notification.objects.create(user=admin_user, notf=f"{request.user.name} has invited you to be the {group.name} group admin.")
 
         return Response({"message": "Admin added successfully."}, status=status.HTTP_200_OK)
 

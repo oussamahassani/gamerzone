@@ -1,0 +1,34 @@
+.featuredChart {
+    flex: 2;
+    background-color: #5a9ff8;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(185, 16, 16, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(221, 73, 73, 0.47);
+    border-radius: 10px;
+    height: 400px;
+    padding: 10px;
+}
+.featuredChart form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+.featuredChart form .states, .featuredChart form .city, .featuredChart form .adress, .featuredChart form .postal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.featuredChart form .states select, .featuredChart form .city select, .featuredChart form .adress select, .featuredChart form .postal select {
+    flex: 3;
+    height: 30px;
+    border-radius: 10px;
+}
+.featuredChart form .states label, .featuredChart form .city label, .featuredChart form .adress label, .featuredChart form .postal label, .featuredChart form .states input, .featuredChart form .city input, .featuredChart form .adress input, .featuredChart form .postal input {
+    flex: 2;
+    height: 30px;
+    border-radius: 10px;
+}
+

@@ -11,4 +11,9 @@ urlpatterns = [
     path('notifications/',include('notifications.urls')),
     path('posts/',include('posts.urls')),
     path('todo/',include('todo.urls')),
+    path('groups/', include ('groups.urls')),
+    path('story/', include ('story.urls')),
+    path('saved/', include ('saved.urls')),
+    path('reports/', include ('reports.urls')),
+    path('dashboard/', include ('dashboard.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

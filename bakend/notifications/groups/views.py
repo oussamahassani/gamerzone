@@ -5,7 +5,7 @@ from groups.serializers import GroupSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import  status 
 from rest_framework.response import Response
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 from .serializers import AdminIdSerializer, GroupPostSerializer, GroupPostSerializer_GET,  GroupSerializer ,GroupSerializer_Get
 from .models import Group, GroupPost,User
 from rest_framework.views import APIView
@@ -75,7 +75,7 @@ class GroupMembersView(APIView):
     def get(self, request, pk, *args, **kwargs):
         group = get_object_or_404(Group, pk=pk)
         members = group.members.all()
-        serializer = UserSerializer(members, many=True)
+        serializer = CustomUserSerializer(members, many=True)
         return Response({'members': serializer.data})
 
 

@@ -13,11 +13,9 @@ import Profile from './components/user/profile';
 import SpecificPost from './components/Post/specific_post';
 import Todo from './components/ToDo/Todo';
 import MobileHome from './components/appbar/mobilehome';
+import Dashbord from './pages/home/Home'
 
 
-// window.addEventListener("resize", function() {
-//     return window.innerWidth;
-//   });
 
 export class App2 extends Component{
    
@@ -44,8 +42,10 @@ export class App2 extends Component{
                         <Route exact path='/peoples' render={() => <People   key={uuidv4()}/>}/>
                         <Route exact path='/profile/:username' render={() => <Profile   key={uuidv4()}/>}   />
                         <Route exact path='/home' render={() => <Post   key={uuidv4()}/>}/>
-                        <Route exact path='/post/:id' component={SpecificPost} />
+                        <Route exact path='/post/:id' component={SpecificPost} key={"az44444ertyu"}/>
                         <Route exact path='/todo' render={() => <Todo   key={uuidv4()}/> }/>
+                       {/* <Route exact path='/dashbord' render={() => <Dashbord   key={uuidv4()}/> }/>*/}
+                        
                         </div>
                     </Home>:
                     

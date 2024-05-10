@@ -1,7 +1,7 @@
 import React from 'react'
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import './chart.scss'
-import Typography from '@mui/material/Typography';
+import './chart.css'
+import Typography from '@material-ui/core/Typography';
 
 
 const Chart = () => {

@@ -7,7 +7,7 @@ from users.models import User
 from .models import Report
 from .serializers import ReportSerializer
 from rest_framework.permissions import IsAuthenticated
-from notifications.models import Notifications
+from notifications.models import Notification
 # Create your views here.
 
 
@@ -40,10 +40,10 @@ class GroupReportsAPIView(APIView):
             # Determine where to send the report based on reported item type
             if post.is_on_homepage():
                 super_admin = User.objects.get(is_superuser=True)
-                Notifications.objects.create(recipient=super_admin, content="New report on homepage post")
+                Notification.objects.create(recipient=super_admin, content="New report on homepage post")
             else:
                 group_admin = post.group.admin
-                Notifications.objects.create(recipient=group_admin, content="New report on group post")
+                Notification.objects.create(recipient=group_admin, content="New report on group post")
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

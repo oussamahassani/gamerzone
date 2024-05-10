@@ -117,7 +117,7 @@ export default function Home({children}) {
 const classes = useStyles();
 const theme = useTheme();
 const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
-const BASE_URL_WS=process.env.REACT_APP_BASE_URL_WS;
+const BASE_URL_WS=process.env.REACT_APP_BASE_URL_WS ?process.env.REACT_APP_BASE_URL_WS : "" ;
 const [iconid,setid]=useState();
 const [open, setOpen] = useState(false);
 const [notiCount, setnotiCount] = useState(0);
@@ -153,6 +153,7 @@ useEffect(() => {
   setnotiCount(data.value.count)
   setmessageCount(data.value.message_count)
   };
+  
   chatSocket.onclose = function(e) {
   console.error('Chat socket closed unexpectedly');
 
@@ -225,7 +226,7 @@ paper: clsx({
 </div>
 <Divider  style={{ marginTop:'7px'}}/>
 <List>
-{['Home','Peoples','Messages','Notifications','Profile','ToDo','Logout',].map((iconnames, idx) => {
+{['Home','Peoples','Messages','Notifications','Save','ToDo','Dashbord','Logout',].map((iconnames, idx) => {
 const Icon = icons[idx];
 var url = `/${iconnames.toLowerCase()}`
 
@@ -240,7 +241,7 @@ else if(idx==3){
   badgevalue=notiCount
 }
 return (
-<NavLink  to={url} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} activeClassName="selected">
+<NavLink  to={url} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
 <div>
 <div onClick={()=>{changeColor(idx)}} >
 <Tooltip title={<h3>{iconnames}</h3>}  placement="right">
