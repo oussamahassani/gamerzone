@@ -15,8 +15,6 @@ import Todo from './components/ToDo/Todo';
 import MobileHome from './components/appbar/mobilehome';
 import Dashbord from './pages/home/Home'
 
-
-
 export class App2 extends Component{
    
    render(){
@@ -39,13 +37,15 @@ export class App2 extends Component{
                     <div style={{margin:'auto'}}>
                         <Route exact path='/notifications'  render={() => <Notification   key={uuidv4()}/>} />
                         <Route exact path='/messages'  render={() => <ChatsRecent   key={uuidv4()}/>}/>
-                        <Route exact path='/peoples' render={() => <People   key={uuidv4()}/>}/>
+                        
+                        <Route exact path='/community' render={() => <People   key={uuidv4()}/>}/>
                         <Route exact path='/profile/:username' render={() => <Profile   key={uuidv4()}/>}   />
                         <Route exact path='/home' render={() => <Post   key={uuidv4()}/>}/>
                         <Route exact path='/post/:id' component={SpecificPost} key={"az44444ertyu"}/>
                         <Route exact path='/todo' render={() => <Todo   key={uuidv4()}/> }/>
-                       {/* <Route exact path='/dashbord' render={() => <Dashbord   key={uuidv4()}/> }/>*/}
-                        
+                        <Route exact path='/dashboard' render={() => <Dashbord   key={uuidv4()}/> }/>
+                        <Route exact path='/profile' to="/profile/:username"/>
+
                         </div>
                     </Home>:
                     

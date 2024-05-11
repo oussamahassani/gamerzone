@@ -11,9 +11,19 @@ from .models import User,Follow
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 import random
-
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework import status
 # Create your views here.
+class FindCurrent(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        user = request.user  # Access the current authenticated user
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data)
+       
 
 
 #to create a user

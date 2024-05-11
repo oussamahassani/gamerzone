@@ -3,7 +3,6 @@ import { NavLink,useParams } from 'react-router-dom';
 import '../assests/App.css';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -18,20 +17,42 @@ import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
 import Newchat from './newchat';
 import Chat from './chat';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 
 
 
-const useStyles = makeStyles((theme) => ({
+
+  const useStyles = makeStyles({
     root2:{
       flexGrow: 1,
     },
-    
-  
-  }));
-
-
+    table: {
+      minWidth: 650,
+    },
+    chatSection: {
+      width: '100%',
+      height: '80vh'
+    },
+    headBG: {
+        backgroundColor: '#e0e0e0'
+    },
+    borderRight500: {
+        borderRight: '1px solid #e0e0e0'
+    },
+    messageArea: {
+      height: '70vh',
+      overflowY: 'auto'
+    }
+  });
 
 export default function ChatsRecent() {
+
+
     const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
     const BASE_URL_WS=process.env.REACT_APP_BASE_URL_WS;
     const classes = useStyles();
@@ -135,9 +156,28 @@ const change = (bool) =>{
 
 
 return(
-    <div className='root'>
-      
-      <div className='root1' style={{border:'ridge',display:showrecent.current?'block':'none'}}>
+    <div >
+      <Grid container>
+            <Grid item xs={12} >
+                <Typography variant="h5" className="header-message">Chat</Typography>
+            </Grid>
+        </Grid>
+        <Grid container component={Paper} className={classes.chatSection}>
+            <Grid item xs={3} className={classes.borderRight500}>
+            <div className='root1' style={{border:'ridge',display:showrecent.current?'block':'none'}}>
+                <List>
+                    <ListItem button key="RemySharp">
+                       
+                        <ListItemText primary="John Wick"></ListItemText>
+                    </ListItem>
+                </List>
+                <Divider />
+                <Grid item xs={12} style={{padding: '10px'}}>
+                    <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+                </Grid>
+                <Divider />
+                
+                
       <div style={{margin:'5px',fontFamily:'sans-serif'}}>
       CHATS
       <AddBoxIcon 
@@ -200,16 +240,27 @@ return(
     
     </Container >
   </div>
+               
+                {(open===true?<Newchat  open={open} onClose={handleClose}/>:<></>)}
 
-  {(open===true?<Newchat  open={open} onClose={handleClose}/>:<></>)}
-
-
-  <div>
+            </Grid>
+            <Grid item xs={9}>
+            <div className={classes.messageArea}>
           {window.innerWidth < 700 && showchatid.current!=0?change(false):change(true)}
           {showrecent.current==true &&  showchatid.current===0?<></>:<Chat id={showchatid.current} name={sendername} />}
           {/* {window.innerWidth >= 700 &&  showchatid.current===0?<></>:<Chat id={showchatid.current} name={sendername} />} */}
   </div>
     
+               
+                <Divider />
+            
+            </Grid>
+        </Grid>
+
+
+ 
+
+
     </div>
 )
 

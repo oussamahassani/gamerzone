@@ -10,6 +10,7 @@ import Following from "./following";
 import PostLayout from "../Post/post_layout";
 import UserfollowUnfollow from "./Action/user_followUnfollow";
 import { Avatar, Button } from "@material-ui/core";
+import CoverPic from './CoverPice/CoverPic';
 
 const useStyles = makeStyles((theme) => ({
     follow_following_div:{
@@ -78,7 +79,9 @@ export default function Profile(){
 
     return(
         <>
+
          <div>
+            <CoverPic/>
             {userphoto && <Avatar src={userphoto}/>}
             <h2>{username}</h2>
             <div className={classes.follow_following_div}>

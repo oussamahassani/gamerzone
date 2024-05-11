@@ -1,0 +1,14 @@
+.profile {
+    display: flex;
+}
+.profile .profileContainer {
+    flex: 6;
+}
+.profile .m-2 {
+    margin: 0.25rem;
+}
+.profile .logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}

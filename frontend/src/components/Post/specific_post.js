@@ -16,6 +16,7 @@ import AddPost from "./actions/add_post";
 import Icon from '@material-ui/core/Icon';
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import KeyboardBackspace from "@material-ui/icons/KeyboardBackspace";
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -169,7 +170,7 @@ const sendcomment =(e) =>{
               <CardContent>
               <div className="Post-image">
               <div>
-                  {post&&< img src={BASE_URL_HTTP + "/"+post.Image}style={{ width:"100%",height:'100%'}}/>}
+                  {post&&< img src={BASE_URL_HTTP +post.Image}style={{ width:"450px",height:'450px'}}/>}
               </div>
                   
                   <div className="Post-caption">
@@ -226,6 +227,7 @@ const sendcomment =(e) =>{
         }}>{Comment.body}
         <br/><br/>
         {Comment.time_ago}
+        {moment().from(moment(Comment.time_ago))}
         </div>
         
       </Paper>

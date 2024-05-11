@@ -170,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
 
                 <div className="Post-image-bg">
                 
-                {post.Image &&  <img  src={post.Image} onError={(e)=>{isvideo=true;e.target.onerror = null; e.target.src="";}}/>}
+                {post.Image &&  <img  src={BASE_URL_HTTP+post.Image} onError={(e)=>{isvideo=true;e.target.onerror = null; e.target.src="";}}/>}
                 {/* {post.Image && isvideo && <video  controls >
                 <source src={post.Image} type="video/mp4"  />
                 </video>}

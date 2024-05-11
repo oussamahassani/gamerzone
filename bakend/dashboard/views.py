@@ -107,14 +107,19 @@ def dashboard(request):
     ).values('year', 'month').annotate(count=Count('id')).order_by('year', 'month')
 
   
-
+    post_count = Post.objects.count()
+    user_count = User.objects.count()
+# Count all rows in the User model
+    
     data = {
         #'traffic_by_age': dict(age_groups),
         'traffic_by_location': dict(traffic_by_location),
         'traffic_by_gender': dict(traffic_by_gender),
         'week_posts_performance':week_posts_performance,
         #'week_story_count': week_story_count,
-        'user_counts':user_counts
+        'user_counts':user_counts,
+		'post_count':post_count,
+		'user_count':user_count
  
     }
 

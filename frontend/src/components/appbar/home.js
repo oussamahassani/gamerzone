@@ -20,6 +20,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import ListItemText from '@material-ui/core/ListItemText';
 import SaveIcon from '@material-ui/icons/Save';
 import Avatar from '@material-ui/core/Avatar';
@@ -38,8 +39,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Search from './search';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import People from '../people';
-
-
+import Sidebar from '../SideBare/sidebar'
+import {BookmarkBorder as BookmarkIcon} from '@material-ui/icons';
 
 
 const drawerWidth = 250;
@@ -125,6 +126,7 @@ const [msgCount, setmsgCount] = useState(0);
 const [messageCount, setmessageCount] = useState(0);
 const [username,setusername]=useState();
 const [profile,setprofile]=useState();
+const [mydata,setmydata] = useState();
 const handleDrawerOpen = () => {
   setOpen(true);
 };
@@ -144,6 +146,16 @@ const icons = [
 
 useEffect(() => {
   const x=localStorage.getItem('token');
+  axios.get(`${BASE_URL_HTTP}/user/findCurrent`,{
+    headers: {
+        'Authorization': `token ${x}`,  
+      },
+     
+    }).then((res)=>{
+      setmydata(res.data)
+       
+}
+,(error)=>{console.log(error.message,error.response)})
   const link = `${BASE_URL_WS}/ws/noticount/?authorization=${x}` ;
   const chatSocket = new WebSocket(link);
   chatSocket.onmessage = function(e) {
@@ -158,7 +170,7 @@ useEffect(() => {
   console.error('Chat socket closed unexpectedly');
 
 };
-}, []); 
+}, [setmydata]); 
 
 
 const changeColor=(idx,s)=>{
@@ -206,6 +218,10 @@ className={clsx(classes.appBar, {
 
 </Toolbar>
 </AppBar>
+
+{/*<Sidebar username={mydata}/>*/}
+
+
 <Drawer
 variant="permanent"
 className={clsx(classes.drawer, {
@@ -226,12 +242,28 @@ paper: clsx({
 </div>
 <Divider  style={{ marginTop:'7px'}}/>
 <List>
-{['Home','Peoples','Messages','Notifications','Save','ToDo','Dashbord','Logout',].map((iconnames, idx) => {
+<NavLink  to={'dashbord'} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+<Tooltip title={<h3>{"BookmarkIcon"}</h3>}  placement="right">
+<ListItem key={"BookmarkIcon"}>
+    <ListItemIcon>
+  <DashboardIcon/>
+ </ListItemIcon> 
+</ListItem> 
+  </Tooltip>
+  </NavLink>
+{['Home','Peoples','Messages','Notifications','Profile','Logout'].map((iconnames, idx) => {
 const Icon = icons[idx];
 var url = `/${iconnames.toLowerCase()}`
 
-if (username&&iconnames=='Profile'){
-  url=url+'/'+username
+if (username&&iconnames=='Profile' || (mydata && mydata.user_name && iconnames=='Profile' )){
+  if(username){
+    url=url+'/'+username
+
+  }
+  else {
+    url=url+'/'+mydata.user_name
+
+  }
 }
 var badgevalue=0;
 if (idx==2){
@@ -260,6 +292,15 @@ return (
 </NavLink >
 )
 })}
+<NavLink  to={'save'} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+<Tooltip title={<h3>{"save post"}</h3>}  placement="right">
+<ListItem key={"BookmarkIcon"}>
+    <ListItemIcon>
+  <BookmarkIcon/>
+ </ListItemIcon> 
+</ListItem> 
+  </Tooltip>
+  </NavLink>
 </List>
 </Drawer>
 
