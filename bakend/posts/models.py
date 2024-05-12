@@ -49,7 +49,7 @@ class Post(models.Model):
 	def username(self):
 		return self.user.user_name
 	def userphoto(self):
-		return self.user.picture
+		return self.user.mypicture
 	
 
 

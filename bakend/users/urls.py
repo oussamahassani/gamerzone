@@ -12,5 +12,5 @@ urlpatterns = [
     path('suggested_friends',suggested_friends.as_view()),
     path('followers_followings/<str:username>',followers_followings.as_view()),
     path('finduser/',FindUser.as_view()),
-       path('findCurrent/',FindCurrent.as_view()),
+    path('findCurrent/',FindCurrent.as_view()),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

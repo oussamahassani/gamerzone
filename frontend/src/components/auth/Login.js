@@ -11,9 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
-import { ReactComponent as Svg } from '../assests/svg/logo.svg';
+import logo  from '../assests/logo.png';
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+    background:'linear-gradient( #221860, #070224)'
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -26,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
   svg: {
     position: 'relative',
-    minHeight: 300,
-    minWidth: 300,
-    maxWidth: '30%',
-    maxHeight: '30%',
+    minHeight: 200,
+    minWidth: 400,
+    maxWidth: 450,
+    maxHeight: 250,
     marginTop: 80,
     marginLeft: 80
   },
@@ -116,12 +119,12 @@ export default function Login() {
   }
 
   return (
-    <div style={{ display: 'flex' }}  >
-      {window.innerWidth > 700 && <Svg className={classes.svg} />}
+    <div style={{ display: 'flex' }} className={classes.root} >
+      {window.innerWidth > 700 && <img src={logo} className={classes.svg} />}
       <div className='container' component="main">
         <CssBaseline />
         <div className={classes.paper}>
-          {window.innerWidth < 700 && <Svg style={{ maxHeight: '40vh', maxWidth: '40vw' }} />}
+          {window.innerWidth < 700 && <img src={logo} style={{ maxHeight: '40vh', maxWidth: '40vw' }} />}
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>

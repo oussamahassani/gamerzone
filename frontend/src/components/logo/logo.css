@@ -1,0 +1,66 @@
+
+.logo-container {
+  background: linear-gradient(to bottom, #221860, #1B134B, #120D34, #080517, #010003);
+  height: 100vh;
+}
+
+.logo-image-container {
+  align-items: center;
+  position: absolute;
+  top: 26%;
+  right: 20%;
+  
+}
+
+.logo-container p {
+  font-size: 16px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70%;
+}
+
+
+.logo-container img {
+  height: 200px;
+}
+
+.slogan-text {
+  
+  margin: 0;
+  color: white;
+  font-family:Bodoni Moda;
+  font-size: 0.55cm;
+  position: absolute;
+  top: 50%;
+  right: 15%;}
+
+
+
+.button-container {
+  margin-bottom: 1rem;
+  background-color: rgb(250, 65, 65);
+  height: 1cm;
+  width: 5cm;
+  margin-left: 30%;
+  font-family:Bodoni Moda;
+  font-size: 0.45cm;
+  position: absolute;
+  top: 65%;
+right: 35%;}
+
+.button-container1 {
+  margin-bottom: 1rem;
+  background-color: rgb(250, 65, 65);
+  height: 1cm;
+  width: 5cm;
+  font-family:Bodoni Moda;
+  font-size: 0.45cm;
+  position: absolute;
+  top: 65%;
+right: 60%;}
+
+.button-container1:hover button {
+  background-color: transparent;
+}

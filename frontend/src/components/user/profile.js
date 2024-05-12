@@ -82,7 +82,7 @@ export default function Profile(){
 
          <div>
             <CoverPic/>
-            {userphoto && <Avatar src={userphoto}/>}
+            {userphoto && userphoto.startsWith('/media') ? <Avatar src={BASE_URL_HTTP + userphoto}/> : <Avatar src={userphoto}/>}
             <h2>{username}</h2>
             <div className={classes.follow_following_div}>
 

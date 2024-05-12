@@ -10,7 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id','email','user_name','picture','password','first_name','last_name','created','birthday','gender','location')
+        fields = ('id','email','user_name','_picture','mypicture','password','first_name','last_name','created','birthday','gender','location')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -22,7 +22,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.save()
         Token.objects.create(user=instance)
         return instance
-
+   # def decrypt_password(encrypted_password , validated_data):{
+    #    instance = self.Meta.model(**validated_data)
+     #   if password is not None:
+     #       instance.set_password(password)
+    #  instance.save()
+    #   return instance
+    #}
 class CustomFollowSerializer(serializers.ModelSerializer):
     # follower=serializers.CharField(source='follower.user_name')
     # following=serializers.CharField(source='following.user_name')

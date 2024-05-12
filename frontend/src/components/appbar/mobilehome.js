@@ -224,9 +224,7 @@ className={clsx(classes.appBar, {
             <NotificationsIcon style={{margin:'5px',color:'white',fontSize:'35px'  }}  className={classes.large} />
           </Badge>
         </NavLink>
-        <NavLink  to={'/todo'}   style={{ textDecoration: 'none',cursor:'pointer'}} >
-            <AssignmentTurnedInIcon style={{margin:'5px',color:'white',fontSize:'35px'  }}  className={classes.large} />
-        </NavLink>
+        
         </div>
       </AppBar>
 </div>

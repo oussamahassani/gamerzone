@@ -76,7 +76,7 @@ class posts_particularUser(APIView):
             'likeCount':likeCountDict,
             'pageCnt':pageCnt,
             'isCurrenUser':request.user==user,
-            'userphoto' : user.picture,
+            'userphoto' : user.mypicture,
             },
             status=200)
     def post(self,request,format=None,*args,**kwargs):

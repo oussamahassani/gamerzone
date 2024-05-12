@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   export default function PostLayout(props)  {
     const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
     const params=props.params
-    const url=props.params.url
+    const url= BASE_URL_HTTP + '/saved/saved-posts'
     const classes = useStyles();
     const [Posts,setPosts]=useState();
     const [isLiked,setisLiked]=useState({});
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   };
   const handleSavePost = (post) => {
     setAnchorEl(null);
-    axios.post(`${BASE_URL_HTTP}/saved/save/${post.id}`,{post_id:post.id}, {
+    axios.post(`${BASE_URL_HTTP}/saved/unsave/${post.id}`,{post_id:post.id}, {
       headers: {
         'Authorization': `token ${x}`,
       },
@@ -85,36 +85,7 @@ const useStyles = makeStyles((theme) => ({
         setPageCount(PageCount+1);
       }
     };
-    const likeDislike=(id)=>{
-      if(isLiked[id]==1){
-        axios.delete(`${BASE_URL_HTTP}/posts/like_dislike`, {
-          headers: {
-            'Authorization': `token ${x}`,
-          },
-          data: {
-            post_id:id,
-          }
-        }).then((res)=>{
-          
-          setisLiked({...isLiked,[id]:0});
-          setlikedCount({...likedCount,[id]:likedCount[id]-1});
-      },(error)=>{console.log(error.message,error.response)})
-      
-      }
-      else{
-        axios.post(`${BASE_URL_HTTP}/posts/like_dislike`,{post_id:id}, {
-          headers: {
-            'Authorization': `token ${x}`,
-          },
-         
-        }).then((res)=>{
-          
-          setisLiked({...isLiked,[id]:1});
-          setlikedCount({...likedCount,[id]:likedCount[id]+1});
-      },(error)=>{console.log(error.message,error.response)})
-      
-      }
-    }
+  
     useEffect(() => { 
         window.addEventListener('scroll', handleScroll, {
         passive: true
@@ -127,10 +98,7 @@ const useStyles = makeStyles((theme) => ({
                 'Authorization': `token ${x}`,
                 
               },
-                params:{
-                  page:PageCount,
-                  type:params.type,
-                }
+               
             }).then((res)=>{
               
               if(!Posts){
@@ -154,11 +122,7 @@ const useStyles = makeStyles((theme) => ({
           window.removeEventListener('scroll', handleScroll);
         };
     }, [PageCount])
-    const [Open,setOpen]=useState(false);
-    const handleClose = () => {
-      setOpen(false);
-      
-    };
+ 
 
 
 
@@ -186,8 +150,8 @@ const useStyles = makeStyles((theme) => ({
       >
               <div className="Post-user">
 
-              {post.userphoto && post.userphoto.startsWith('/media') ? <Avatar src={BASE_URL_HTTP + post.userphoto} className={classes.large} /> : <Avatar src={post.userphoto} className={classes.large}  />}
 
+                <Avatar  src={post.userphoto} className={classes.large} />
           
 
    
@@ -201,8 +165,7 @@ const useStyles = makeStyles((theme) => ({
 
               </div>
               <IconButton
-
-        color = "default"
+               color={"inherit"}
         aria-label="more"
         aria-controls="long-menu"
         aria-haspopup="true"  onClick={handleClick}>
@@ -216,7 +179,7 @@ const useStyles = makeStyles((theme) => ({
   onClose={handleMenuClose}
   TransitionComponent={Fade}
 >
-  <MenuItem onClick={() =>handleSavePost(post)}> saved post</MenuItem>
+  <MenuItem onClick={() =>handleSavePost(post)}>delete Save post</MenuItem>
  
 </Menu>
 </Box>
@@ -235,12 +198,10 @@ const useStyles = makeStyles((theme) => ({
               </div>
             <div className="Post-caption">
             
-            <IconButton onClick={()=>likeDislike(post.id)} color={isLiked[post.id]==1? "secondary":"inherit"} className={classes.button} aria-label="Add an alarm">
-        <Icon><FavoriteIcon /></Icon>
-      </IconButton>
+       
             {likedCount[post.id]}&nbsp;
             
-            <IconButton  className={classes.button}  color={"inherit"}>
+            <IconButton  className={classes.button}  color={""}>
             <NavLink to={`/post/${post.id}`} style={{ textDecoration: 'none',cursor:'pointer',color:'black'}}> <Icon><ForumIcon /></Icon></NavLink>
       </IconButton>
             <div>Caption:{post.caption}</div>

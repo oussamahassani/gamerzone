@@ -40,6 +40,7 @@ import Search from './search';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import People from '../people';
 import Sidebar from '../SideBare/sidebar'
+
 import {BookmarkBorder as BookmarkIcon} from '@material-ui/icons';
 
 
@@ -212,7 +213,7 @@ className={clsx(classes.appBar, {
 
 
       <Avatar style={{margin:'15px' }}  src={profile} className={classes.large} />
-      <h8 style={{ fontSize: 18,marginTop:'5px',whitespace: 'nowrap',marginRight:'30%'}}>{username}</h8>
+      <h4 style={{ fontSize: 18,marginTop:'5px',whitespace: 'nowrap',marginRight:'30%'}}>{username}</h4>
       <Search/>
       <Button onClick={logout} style={{ fontSize:15,margin:'15px',color:'white',marginLeft:'30%' }}>Logout</Button>
 
@@ -242,9 +243,9 @@ paper: clsx({
 </div>
 <Divider  style={{ marginTop:'7px'}}/>
 <List>
-<NavLink  to={'dashbord'} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
-<Tooltip title={<h3>{"BookmarkIcon"}</h3>}  placement="right">
-<ListItem key={"BookmarkIcon"}>
+<NavLink  to={'/dashboard'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+<Tooltip title={<h3>{"dashboard"}</h3>}  placement="right">
+<ListItem key={"dashboard"}>
     <ListItemIcon>
   <DashboardIcon/>
  </ListItemIcon> 
@@ -273,7 +274,8 @@ else if(idx==3){
   badgevalue=notiCount
 }
 return (
-<NavLink  to={url} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+  <span key={idx}>
+<NavLink  to={url} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
 <div>
 <div onClick={()=>{changeColor(idx)}} >
 <Tooltip title={<h3>{iconnames}</h3>}  placement="right">
@@ -290,11 +292,21 @@ return (
 {idx===3?<Divider />:<></>}
 </div>
 </NavLink >
+</span>
 )
 })}
-<NavLink  to={'save'} replace="true" activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+<NavLink  to={'/savedPost'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
 <Tooltip title={<h3>{"save post"}</h3>}  placement="right">
 <ListItem key={"BookmarkIcon"}>
+    <ListItemIcon>
+  <BookmarkIcon/>
+ </ListItemIcon> 
+</ListItem> 
+  </Tooltip>
+  </NavLink>
+  <NavLink  to={'/groups'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
+<Tooltip title={<h3>{"groups"}</h3>}  placement="right">
+<ListItem key={"groups"}>
     <ListItemIcon>
   <BookmarkIcon/>
  </ListItemIcon> 

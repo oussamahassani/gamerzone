@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['user_name',]
 
     @property
-    def picture(self):
+    def mypicture(self):
         try: 
             self._picture.url
             return self._picture.url

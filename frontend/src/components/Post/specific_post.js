@@ -175,7 +175,7 @@ const sendcomment =(e) =>{
                   
                   <div className="Post-caption">
 
-                  <IconButton onClick={()=>likeDislike(post.id)} color={isLiked==1? "secondary":""} className={classes.button} aria-label="Add an alarm">
+                  <IconButton onClick={()=>likeDislike(post.id)} color={isLiked==1? "secondary":"inherit"} className={classes.button} aria-label="Add an alarm">
                   <Icon><FavoriteIcon /></Icon>
                   </IconButton>
                   {likedCount}&nbsp;

@@ -14,7 +14,8 @@ import SpecificPost from './components/Post/specific_post';
 import Todo from './components/ToDo/Todo';
 import MobileHome from './components/appbar/mobilehome';
 import Dashbord from './pages/home/Home'
-
+import SavedPost from './components/Post/savePost_layout'
+import FirstPage  from './components/logo/logo'
 export class App2 extends Component{
    
    render(){
@@ -24,7 +25,7 @@ export class App2 extends Component{
         <BrowserRouter basename="/">
         
             <Switch>
-                    <Route exact path='/' component={Login} />
+                    <Route exact path='/' component={FirstPage} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/register' component={Register} />
                     <Route exact path="/logout" component={ Logout }></Route>
@@ -45,7 +46,9 @@ export class App2 extends Component{
                         <Route exact path='/todo' render={() => <Todo   key={uuidv4()}/> }/>
                         <Route exact path='/dashboard' render={() => <Dashbord   key={uuidv4()}/> }/>
                         <Route exact path='/profile' to="/profile/:username"/>
+                        <Route exact path='/savedPost' render={() => <SavedPost   key={uuidv4()}/> }/>
 
+                        
                         </div>
                     </Home>:
                     
