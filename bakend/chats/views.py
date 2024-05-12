@@ -13,7 +13,7 @@ import json
 from notifications.models import Notification
 
 # Create your views here.
-
+#emna
 class ChatListCreateView(generics.ListCreateAPIView):
     serializer_class = ChatSerializer
     authentication_classes = (TokenAuthentication,)
