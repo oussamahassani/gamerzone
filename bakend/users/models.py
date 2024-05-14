@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
     location = models.CharField(max_length=255, null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True)
-    photo_couv=models.FileField(upload_to='media/coverPic', blank=False)
+    photo_couv=models.FileField(upload_to='coverPic', blank=False ,null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['user_name',]

@@ -40,18 +40,23 @@ class CreateUserAPIView(generics.ListCreateAPIView):
         permission_classes=[IsAuthenticated,]
         parser_classes = [MultiPartParser, FormParser]
         user=request.user
+        first_name = request.data.get('first_name', '')
+        last_name = request.data.get('last_name', '')
+        birthday = request.data.get('birthday', '')
+        location = request.data.get('birthday', '')
+       
         if(request.data['Image'] and  request.data['Image'] is not None and  request.data['Image'] != 'null'):
             user._picture=request.data['Image']
-        if(request.data['first_name']):
+        if(first_name is not None and first_name != ''):
             user.first_name = request.data['first_name']
-        if(request.data['last_name']):
+        if(last_name is not None and last_name != ''):
             user.last_name = request.data['last_name']
-        if(request.data['birthday']):
+        if(birthday is not None and birthday != ''):
             user.birthday = request.data['birthday']
-        if(request.data['location']):
+        if(location is not None and location != ''):
             user.location = request.data['location']
-        if(request.data['password']):
-            user.set_password(request.data['password'])
+      #  if(request.data['password']):
+      #     user.set_password(request.data['password'])
         user.save()
         return Response({},status=200)
 
