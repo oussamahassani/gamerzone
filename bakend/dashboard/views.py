@@ -50,8 +50,13 @@ def dashboard(request):
         'Beja', 'Kasserine', 'Tozeur', 'Medenine', 'Siliana', 'Zaghouan', 'Kebili', 
         'Grombalia', 'Djerba'
     ]
+    # Get the logged-in user
+    logged_in_user = request.user
     
-    for user in User.objects.all():
+    # Filter users who are followers of the logged-in user
+    followers = logged_in_user.followers.all()
+
+    for user in followers:
 #age     
         #birthday_date = datetime.strptime(user.birthday, '%Y-%m-%d').date()
 
