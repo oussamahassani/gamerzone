@@ -91,8 +91,12 @@ class GroupMembersView(APIView):
             mygroup.save()
             mygroup_ser = MyGroupSerializer(mygroup )
         #Notification.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
+        Notification.objects.create(user=request.user,notification_type=4, title=f"You have been invited to join the {group.name} group.")
+
 
         return JsonResponse(mygroup_ser.data )
+
+
     
 class MyGroupRetrieveAPIView(APIView):
     def get(self, request, pk, *args, **kwargs):
