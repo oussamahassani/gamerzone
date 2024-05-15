@@ -48,19 +48,6 @@ export default function GroupLayout(props) {
 
 
   };
-
-  const rejoindreGroup = (groups) => {
-    axios.post(`${BASE_URL_HTTP}/groups/groups/members/${groups.id}`, {
-      headers: {
-        'Authorization': `token ${x}`,
-      },
-
-    }).then((res) => {
-      setmydata(res.data)
-
-    }
-      , (error) => { console.log(error.message, error.response); alert(error.response.data.detail) })
-  }
   const findIsExisteInSupperAdmin = (group, currentUser) => {
     if (currentUser) {
       console.log(currentUser)
@@ -158,7 +145,7 @@ export default function GroupLayout(props) {
                 <div>Caption:{grs.name}</div>
                 <div>Description:{grs.description}</div>
               </div>
-              {findIsExisteInSupperAdmin(grs.super_admin, userCurrent) && <button onClick={() => rejoindreGroup(grs)}>Rejoinder</button>}
+              {findIsExisteInSupperAdmin(grs.super_admin, userCurrent) && <button>Rejoinder</button>}
             </article>
 
           </div>

@@ -77,6 +77,7 @@ class GroupMembersView(APIView):
     def post(self, request, pk, *args, **kwargs):
         group = get_object_or_404(Group, pk=pk)
         group.members.add(request.user)
+
         
         try : 
             mygroup = MyGroup.objects.get(user=request.user)
@@ -92,6 +93,7 @@ class GroupMembersView(APIView):
             mygroup_ser = MyGroupSerializer(mygroup )
         #Notification.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
         Notification.objects.create(user=request.user,notification_type=4, title=f"You have been invited to join the {group.name} group.")
+
 
 
         return JsonResponse(mygroup_ser.data )

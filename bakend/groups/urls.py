@@ -11,9 +11,9 @@ urlpatterns = [
     path('groups', GroupCreateAPIView.as_view(), name='group-detail'),
     path('groups/<int:pk>', GroupCreateAPIView.as_view(), name='group-detail'),
 
-    path('group/postss/<int:post_id>', GroupPostView.as_view(), name='groupposts_update'),
-    path('group/postsView/<int:pk>/<int:post_id>', GroupPostView.as_view(), name='groupposts_update'),
-    path('group/posts/<int:pk>', GroupPostView.as_view(), name='groupposts_create'),
+    path('group/posts/<int:post_id>', GroupPostView.as_view(), name='groupposts_update'),
+    path('group/posts/<int:pk>/<int:post_id>', GroupPostView.as_view(), name='groupposts_update'),
+    path('group/posts/<int:pk>/', GroupPostView.as_view(), name='groupposts_create'),
 
     path('approved-posts/<int:pk>', GroupPostApprovedView.as_view(), name='approved-posts'),
     path('admin/approve/<int:post_id>', AdminPostAction.as_view(), name='admin_approve_post'),

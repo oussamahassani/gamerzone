@@ -9,13 +9,16 @@ import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import axios from "axios";
-
+import AddPost from "./actions/add_post";
 import Icon from '@material-ui/core/Icon';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Avatar, Card, CardActions, CardContent, CardHeader, Paper, Typography } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ForumIcon from '@material-ui/icons/Forum';
-
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Fade from '@material-ui/core/Fade';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Box from '@material-ui/core/Box';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 const useStyles = makeStyles((theme) => ({
