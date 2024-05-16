@@ -1,4 +1,5 @@
 from django.forms import ValidationError
+from django.http import JsonResponse
 from django.shortcuts import render
 from notifications.models import Notification
 from groups.serializers import GroupSerializer
@@ -6,8 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import  status 
 from rest_framework.response import Response
 from users.serializers import CustomUserSerializer
-from .serializers import AdminIdSerializer, GroupPostSerializer, GroupPostSerializer_GET,  GroupSerializer ,GroupSerializer_Get
-from .models import Group, GroupPost,User
+from .serializers import MyGroupSerializer_Get, MyGroupSerializer, AdminIdSerializer, GroupPostSerializer, GroupPostSerializer_GET,  GroupSerializer ,GroupSerializer_Get
+from .models import Group, GroupPost,User ,MyGroup
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -27,8 +28,22 @@ class GroupCreateAPIView(APIView):
         serializer = GroupSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            
+            new_group_id = serializer.instance.id
+            try:
+                mygroup = MyGroup.objects.get(user=request.user)
+                mygroup.group.add(new_group_id)
+                mygroup.save()
+                mygroup_ser = MyGroupSerializer(mygroup)
+            except MyGroup.DoesNotExist:
+                mygroup = MyGroup.objects.create(user=request.user)
+                mygroup.group.add(new_group_id)
+                mygroup.save()
+                mygroup_ser = MyGroupSerializer(mygroup)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
     def get(self, request, *args, **kwargs):
@@ -62,11 +77,32 @@ class GroupMembersView(APIView):
     def post(self, request, pk, *args, **kwargs):
         group = get_object_or_404(Group, pk=pk)
         group.members.add(request.user)
+        
+        try : 
+            mygroup = MyGroup.objects.get(user=request.user)
+            mygroup.group.add(pk)
+            mygroup.save()
+           
+            mygroup_ser = MyGroupSerializer(mygroup )
+        except MyGroup.DoesNotExist :
+            mygroup = MyGroup.objects.create(user=request.user)
+            group = Group.objects.get(pk=pk) 
+            mygroup.group.add(group)
+            mygroup.save()
+            mygroup_ser = MyGroupSerializer(mygroup )
+        #Notification.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
 
-        Notification.objects.create(user=request.user, notf=f"You have been invited to join the {group.name} group.")
-
-        return Response({'message': 'Joined group successfully'})
+        return JsonResponse(mygroup_ser.data )
     
+class MyGroupRetrieveAPIView(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            mygroup = MyGroup.objects.get(pk=pk)
+            serializer = MyGroupSerializer(mygroup)
+            return Response(serializer.data)
+        except MyGroup.DoesNotExist:
+            return Response({"message": "MyGroup does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
     def delete(self, request, pk, *args, **kwargs):
         group = get_object_or_404(Group, pk=pk)
         group.members.remove(request.user)

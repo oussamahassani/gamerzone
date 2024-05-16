@@ -16,6 +16,13 @@ class Group(models.Model):
     class Meta:
         db_table = 'groups'
 
+
+class MyGroup(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    group = models.ManyToManyField(Group, related_name='myGroup')
+    class Meta:
+        db_table = 'MyGroup'
+
 class GroupPost(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     title = models.CharField(max_length=100)

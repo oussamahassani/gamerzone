@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from groups.models import Group, GroupPost
+from groups.models import Group, GroupPost ,MyGroup
 from users.serializers import CustomUserSerializer
 from users.models import User
 class GroupSerializer(serializers.ModelSerializer):
@@ -12,7 +12,20 @@ class GroupSerializer_Get(serializers.ModelSerializer):
     admin = CustomUserSerializer(many=True)
     members = CustomUserSerializer(many=True)
     class Meta:
-        model = Group
+        model = MyGroup
+        fields = '__all__'
+
+
+class MyGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyGroup
+        fields = '__all__'
+
+class MyGroupSerializer_Get(serializers.ModelSerializer):
+    user = CustomUserSerializer()
+    group = CustomUserSerializer()
+    class Meta:
+        model = MyGroup
         fields = '__all__'
 
 

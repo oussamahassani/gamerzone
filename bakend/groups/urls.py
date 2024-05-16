@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.urls import path 
-from groups.views import AddGroupAdminView,AdminPostAction, GroupCreateAPIView, GroupMembersView, GroupPostApprovedView, GroupPostView 
+from groups.views import AddGroupAdminView,AdminPostAction, GroupCreateAPIView, GroupMembersView, GroupPostApprovedView, GroupPostView, MyGroupRetrieveAPIView 
 
 
 urlpatterns = [    
     path('groups/members/<int:pk>', GroupMembersView.as_view(), name='group-members'),
     path('groups/members/<int:pk>/<int:user_id>', GroupMembersView.as_view(), name='group-members'),
+    path('groups/mygroups/<int:pk>/', MyGroupRetrieveAPIView.as_view(), name='mygroups'),
 
     path('groups', GroupCreateAPIView.as_view(), name='group-detail'),
     path('groups/<int:pk>', GroupCreateAPIView.as_view(), name='group-detail'),
@@ -19,5 +20,6 @@ urlpatterns = [
     path('admin/reject/<int:post_id>', AdminPostAction.as_view(), name='admin_reject_post'),
 
     path('groups/<int:pk>/add-admin', AddGroupAdminView.as_view(), name='add_group_admin'),
+
 
 ]
