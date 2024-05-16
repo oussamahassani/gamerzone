@@ -34,6 +34,8 @@ export default function Add_group(props) {
 
     const x = localStorage.getItem('token')
     const classes = useStyles();
+    const [mydata, setmydata] = useState(null);
+
 
     const { onClose, open } = props;
 
@@ -41,9 +43,22 @@ export default function Add_group(props) {
         onClose();
     };
 
+    useEffect(() => {
+        axios.get(`${BASE_URL_HTTP}/user/findCurrent`, {
+            headers: {
+                'Authorization': `token ${x}`,
+            },
+
+        }).then((res) => {
+            setmydata(res.data)
+
+        })
+    }, [setmydata])
+
     const initialFormData = Object.freeze({
         title: '',
         caption: '',
+        description: '',
 
         tags: [1],
     });
@@ -76,9 +91,15 @@ export default function Add_group(props) {
         e.preventDefault();
 
         let formData = new FormData();
-        formData.append('description', 'name');
+        formData.append('description', postData.description);
         formData.append('name', postData.caption);
         formData.append('tags', postData.tags);
+        if (mydata) {
+            formData.append('members', mydata.id);
+            formData.append('admin', mydata.id);
+
+        }
+
 
         formData.append('photo_couv', PostImage);
         formData.append('photo_grp', PostImage);
@@ -107,6 +128,12 @@ export default function Add_group(props) {
                     required
                     autoFocus margin="dense" id="caption" label="caption" type="text" name="caption"
                     onChange={changeDetail} value={postData.caption}
+                    fullWidth
+                />
+                <TextField
+                    required
+                    autoFocus margin="dense" id="description" label="description" type="text" name="description"
+                    onChange={changeDetail} value={postData.description}
                     fullWidth
                 />
                 <div>

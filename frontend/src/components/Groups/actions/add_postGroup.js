@@ -78,7 +78,7 @@ export default function AddPost(props) {
         e.preventDefault();
 
         let formData = new FormData();
-        formData.append('title', 'temp');
+        formData.append('title', postData.title);
         formData.append('content', postData.caption);
         formData.append('tags', postData.tags);
 
@@ -95,7 +95,7 @@ export default function AddPost(props) {
                 },
 
             }).then((res) => {
-                history.push('/groups');
+                history.push('/groups/' + GroupId);
 
             }, (error) => { console.log(error.message, error.response) })
     }
@@ -103,11 +103,17 @@ export default function AddPost(props) {
         <>
             <LinearProgress style={{ display: show }} />
             <Dialog onClose={handleClose} open={open} style={{ minWidth: '400px', minHeight: '40%' }}>
-                <DialogTitle >Add Post</DialogTitle>
+                <DialogTitle >Add Post in group </DialogTitle>
 
                 <TextField
                     required
-                    autoFocus margin="dense" id="caption" label="caption" type="text" name="caption"
+                    autoFocus margin="dense" id="title" label="Titel" type="text" name="title"
+                    onChange={changeDetail} value={postData.title}
+                    fullWidth
+                />
+                <TextField
+                    required
+                    autoFocus margin="dense" id="caption" label="Description" type="text" name="caption"
                     onChange={changeDetail} value={postData.caption}
                     fullWidth
                 />

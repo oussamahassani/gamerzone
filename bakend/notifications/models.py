@@ -59,7 +59,7 @@ class Notification(models.Model):
 		channel_layer = get_channel_layer()
 		count=Notification.objects.filter(is_seen=False,user=instance.user).count()
 		message_count=RecentChat.objects.filter(receiver=instance.user,is_seen=False).count()
-		data={'message_count':message_count,'count':count,'user':instance.user.user_name,'profile_pic':instance.user.picture}
+		data={'message_count':message_count,'count':count,'user':instance.user.user_name,'profile_pic':instance.user.mypicture}
 		room_name="notif_room_for_user_"+str(instance.user.id)
 		async_to_sync(channel_layer.group_send)(
 			 room_name,{

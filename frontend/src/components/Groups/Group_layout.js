@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import { Avatar, Card, CardActions, CardContent, CardHeader, Paper, Typography } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -42,6 +43,8 @@ export default function GroupLayout(props) {
   const [userCurrent, setmydata] = useState();
   const [PageCount, setPageCount] = useState(false);
   const x = localStorage.getItem('token');
+  let history = useHistory();
+
   const handleScroll = () => {
 
     const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
@@ -50,18 +53,33 @@ export default function GroupLayout(props) {
   };
 
   const rejoindreGroup = (groups) => {
-    axios.post(`${BASE_URL_HTTP}/groups/groups/members/${groups.id}`, {
+    axios.post(`${BASE_URL_HTTP}/groups/groups/members/${groups.id}`, {}, {
       headers: {
         'Authorization': `token ${x}`,
       },
 
     }).then((res) => {
-      setmydata(res.data)
+      history.push('/groups');
+
 
     }
       , (error) => { console.log(error.message, error.response); alert(error.response.data.detail) })
   }
   const findIsExisteInSupperAdmin = (group, currentUser) => {
+    if (currentUser) {
+      console.log(currentUser)
+      let isexite = group.filter(el => el.user_name == currentUser.user_name)
+      console.log(isexite)
+
+      if (isexite.length > 0)
+        return false
+      else
+        return true
+    }
+    return false
+  }
+
+  const findIsExisteInMembers = (group, currentUser) => {
     if (currentUser) {
       console.log(currentUser)
       let isexite = group.filter(el => el.user_name == currentUser.user_name)
@@ -158,10 +176,13 @@ export default function GroupLayout(props) {
                 <div>Caption:{grs.name}</div>
                 <div>Description:{grs.description}</div>
               </div>
-              {findIsExisteInSupperAdmin(grs.super_admin, userCurrent) && <button onClick={() => rejoindreGroup(grs)}>Rejoinder</button>}
+              {(findIsExisteInSupperAdmin(grs.super_admin, userCurrent) || findIsExisteInMembers(grs.members, userCurrent)) && <button onClick={() => rejoindreGroup(grs)}>Rejoinder</button>}
+
+              {(!findIsExisteInMembers(grs.members, userCurrent)) && <NavLink to={'/groups/' + grs.id}>Voir</NavLink>}
+
             </article>
 
-          </div>
+          </div >
 
         )
       })
