@@ -17,6 +17,7 @@ import Dashbord from './pages/home/Home'
 import SavedPost from './components/Post/savePost_layout'
 import FirstPage from './components/logo/logo'
 import Groups from './components/Groups'
+import DetailsGroups from './components/Groups/detailsGoup'
 export class App2 extends Component {
 
     render() {
@@ -49,7 +50,7 @@ export class App2 extends Component {
                                         <Route exact path='/profile' to="/profile/:username" />
                                         <Route exact path='/savedPost' render={() => <SavedPost key={uuidv4()} />} />
                                         <Route exact path='/groups' render={() => <Groups key={uuidv4()} />} />
-
+                                        <Route exact path='/groups/:GroupId' render={() => <DetailsGroups key={uuidv4()} />} />
 
 
                                     </div>
@@ -62,6 +63,10 @@ export class App2 extends Component {
                                     <Route exact path='/profile/:username' render={() => <Profile key={uuidv4()} />} />
                                     <Route exact path='/home' render={() => <Post key={uuidv4()} />} />
                                     <Route exact path='/post/:id' component={SpecificPost} />
+                                    <Route exact path='/groups/:GroupId' render={() => <DetailsGroups key={uuidv4()} />} />
+                                    <Route exact path='/groups' render={() => <Groups key={uuidv4()} />} />
+                                    <Route exact path='/savedPost' render={() => <SavedPost key={uuidv4()} />} />
+
                                 </MobileHome>
                             }
 

@@ -49,31 +49,6 @@ export default function GroupLayout(props) {
 
   };
 
-  const rejoindreGroup = (groups) => {
-    axios.post(`${BASE_URL_HTTP}/groups/groups/members/${groups.id}`, {
-      headers: {
-        'Authorization': `token ${x}`,
-      },
-
-    }).then((res) => {
-      setmydata(res.data)
-
-    }
-      , (error) => { console.log(error.message, error.response); alert(error.response.data.detail) })
-  }
-  const findIsExisteInSupperAdmin = (group, currentUser) => {
-    if (currentUser) {
-      console.log(currentUser)
-      let isexite = group.filter(el => el.user_name == currentUser.user_name)
-      console.log(isexite)
-
-      if (isexite.length > 0)
-        return false
-      else
-        return true
-    }
-    return false
-  }
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, {
       passive: true
@@ -154,11 +129,12 @@ export default function GroupLayout(props) {
                 </div>
 
               </div>
-              <div className="Post-caption">
-                <div>Caption:{grs.name}</div>
-                <div>Description:{grs.description}</div>
-              </div>
-              {findIsExisteInSupperAdmin(grs.super_admin, userCurrent) && <button onClick={() => rejoindreGroup(grs)}>Rejoinder</button>}
+              <NavLink to="">
+                <div className="Post-caption" >
+                  <div>Caption:{grs.name}</div>
+                  <div>Description:{grs.description}</div>
+                </div>
+              </NavLink>
             </article>
 
           </div>

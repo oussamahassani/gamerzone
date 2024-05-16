@@ -2,14 +2,10 @@ import React, { Component, useEffect, useRef, useState } from "react";
 import "../assests/post.css";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
 import axios from "axios";
-
 import Icon from '@material-ui/core/Icon';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Avatar, Card, CardActions, CardContent, CardHeader, Paper, Typography } from "@material-ui/core";
@@ -58,23 +54,8 @@ export default function PostLayout(props) {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSavePost = (post) => {
-    // setAnchorEl(null);
-    console.log(post)
-    axios.post(`${BASE_URL_HTTP}/saved/save/${post.id}`, { post_id: post.id }, {
-      headers: {
-        'Authorization': `token ${x}`,
-      },
 
-    }).then((res) => {
-      console.log(res)
 
-    }, (error) => { console.log(error.message, error.response); alert(error.response.data.message) })
-
-  }
   const handleScroll = () => {
 
     const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
@@ -126,10 +107,7 @@ export default function PostLayout(props) {
         'Authorization': `token ${x}`,
 
       },
-      params: {
-        page: PageCount,
-        type: params.type,
-      }
+
     }).then((res) => {
 
       setPosts(
@@ -195,14 +173,7 @@ export default function PostLayout(props) {
                     </div>
 
                   </div>
-                  <IconButton
 
-                    color="default"
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true" onClick={() => handleSavePost(post)}>
-                    <FavoriteBorderIcon />
-                  </IconButton>
 
                 </Box>
               </header>
@@ -211,10 +182,7 @@ export default function PostLayout(props) {
                 <div className="Post-image-bg">
 
                   {post.Image && <img src={BASE_URL_HTTP + post.Image} onError={(e) => { isvideo = true; e.target.onerror = null; e.target.src = ""; }} />}
-                  {/* {post.Image && isvideo && <video  controls >
-                <source src={post.Image} type="video/mp4"  />
-                </video>}
-                 */}
+
                 </div>
 
               </div>

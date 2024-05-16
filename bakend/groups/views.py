@@ -78,6 +78,7 @@ class GroupMembersView(APIView):
         group = get_object_or_404(Group, pk=pk)
         group.members.add(request.user)
 
+
         
         try : 
             mygroup = MyGroup.objects.get(user=request.user)
@@ -97,6 +98,7 @@ class GroupMembersView(APIView):
 
 
         return JsonResponse(mygroup_ser.data )
+
 
 
     
