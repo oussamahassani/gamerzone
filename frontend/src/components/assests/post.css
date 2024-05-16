@@ -26,7 +26,10 @@
       margin-bottom: 20px;
     }
   }
-
+.marginPostGroup{
+  margin-top: 50px;
+  padding-top: 50px;
+}
 
   .Post-user {
 

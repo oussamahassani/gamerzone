@@ -20,41 +20,40 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Fade from '@material-ui/core/Fade';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Box from '@material-ui/core/Box';
+import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
     },
-    button: {
-      margin: theme.spacing.unit,
-      padding:'2px'
-    },
-    input: {
-      display: 'none',
-    },
-  }));
-
-  
-
+  },
+  button: {
+    margin: theme.spacing.unit,
+    padding: '2px'
+  },
+  input: {
+    display: 'none',
+  },
+}));
 
 
 
 
-  export default function PostLayout(props)  {
-    const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
-    const params=props.params
-    const url= BASE_URL_HTTP + '/saved/saved-posts'
-    const classes = useStyles();
-    const [Posts,setPosts]=useState();
-    const [isLiked,setisLiked]=useState({});
-    const [likedCount,setlikedCount]=useState({});
-    const[PageCount,setPageCount]=useState(1);
-    const[totalpageCnt,settotalpageCnt]=useState(PageCount+1);
-    const x=localStorage.getItem('token');
-    const [anchorEl, setAnchorEl] = useState(null);
+
+
+
+export default function PostLayout(props) {
+  const BASE_URL_HTTP = process.env.REACT_APP_BASE_URL_HTPP;
+  const params = props.params
+  const url = BASE_URL_HTTP + '/saved/saved-posts'
+  const classes = useStyles();
+  const [Posts, setPosts] = useState();
+  const [PageCount, setPageCount] = useState(1);
+  const [totalpageCnt, settotalpageCnt] = useState(PageCount + 1);
+  const x = localStorage.getItem('token');
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -65,159 +64,142 @@ const useStyles = makeStyles((theme) => ({
     setAnchorEl(null);
   };
   const handleSavePost = (post) => {
+    console.log(post)
     setAnchorEl(null);
-    axios.post(`${BASE_URL_HTTP}/saved/unsave/${post.id}`,{post_id:post.id}, {
+    axios.delete(`${BASE_URL_HTTP}/saved/unsave/${post.post.id}`, {
       headers: {
         'Authorization': `token ${x}`,
       },
-     
-    }).then((res)=>{
-    console.log(res)  
-      
-  },(error)=>{console.log(error.message,error.response)})
-  
+
+    }).then((res) => {
+      console.log(res)
+
+    }, (error) => { console.log(error.message, error.response); alert(error.response.data.message) })
+
   }
-    const handleScroll = () => {
+  const handleScroll = () => {
 
-      const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
-  
-      if (bottom&&(PageCount<totalpageCnt)) {
-        setPageCount(PageCount+1);
-      }
+    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
+
+    if (bottom && (PageCount < totalpageCnt)) {
+      setPageCount(PageCount + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, {
+      passive: true
+    });
+
+
+
+    axios.get(url, {
+      headers: {
+        'Authorization': `token ${x}`,
+
+      },
+
+    }).then((res) => {
+
+
+      setPosts(
+        res.data,
+      );
+
+      settotalpageCnt(res.data.pageCnt);
+
+
+    }
+      , (error) => { console.log(error.message, error.response) })
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
-  
-    useEffect(() => { 
-        window.addEventListener('scroll', handleScroll, {
-        passive: true
-      });
-
-    
-      
-        axios.get(url,{
-            headers: {
-                'Authorization': `token ${x}`,
-                
-              },
-               
-            }).then((res)=>{
-              
-              if(!Posts){
-                setPosts(
-                  res.data.posts_data, 
-                );
-              }
-              else{
-                
-                setPosts([...Posts, ...res.data.posts_data]);
-              }
-              settotalpageCnt(res.data.pageCnt);
-              setisLiked( Object.assign({}, isLiked,res.data.likeDict ))
-              // setisLiked(res.data.likeDict);
-              
-              setlikedCount(Object.assign({},likedCount ,res.data.likeCount));
-            
-        }
-        ,(error)=>{console.log(error.message,error.response)})
-        return () => {
-          window.removeEventListener('scroll', handleScroll);
-        };
-    }, [PageCount])
- 
+  }, [PageCount])
 
 
 
-    return (
-      <>
-      
 
-      { Posts&& Posts.map((post , index)=>{
-        var isvideo=true;
-        return(
-        
-        <div key={index}>
-          
-          <article className="Post" >
-
-            <header>
-            <Box
-        display="flex"
-        flexWrap="wrap"
-        alignContent="flex-between"
-        p={0}
-        m={0}
-        bgcolor="background.paper"
-        
-      >
-              <div className="Post-user">
+  return (
+    <>
 
 
-                <Avatar  src={post.userphoto} className={classes.large} />
-          
+      {Posts && Posts.map((post, index) => {
+        var isvideo = true;
+        return (
 
-   
+          <div key={index}>
 
-                <div className="Post-user-nickname">
-                <NavLink to={`/profile/${post.username}`}  style={{ textDecoration: 'none',cursor:'pointer',color:'black'}}>
-                  <span>{post.username}</span>
-                </NavLink>
+            <article className="Post" >
 
-                </div>
+              <header>
+                <Box
+                  display="flex"
+                  flexWrap="wrap"
+                  alignContent="flex-between"
+                  p={0}
+                  m={0}
+                  bgcolor="background.paper"
 
-              </div>
-              <IconButton
-               color={"inherit"}
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"  onClick={handleClick}>
-  <MoreVertIcon/>
-</IconButton>
-<Menu
-  id="fade-menu"
-  anchorEl={anchorEl}
-  keepMounted
-  open={open}
-  onClose={handleMenuClose}
-  TransitionComponent={Fade}
->
-  <MenuItem onClick={() =>handleSavePost(post)}>delete Save post</MenuItem>
- 
-</Menu>
-</Box>
-            </header>
+                >
+                  <div className="Post-user">
+
+
+                    <Avatar src={post.post.userphoto} className={classes.large} />
+
+
+
+
+                    <div className="Post-user-nickname">
+                      <NavLink to={`/profile/${post.post.username}`} style={{ textDecoration: 'none', cursor: 'pointer', color: 'black' }}>
+                        <span>{post.post.username}</span>
+                      </NavLink>
+
+                    </div>
+
+                  </div>
+                  <IconButton
+                    color={"inherit"}
+                    aria-label="more"
+                    aria-controls="long-menu"
+                    aria-haspopup="true" onClick={() => handleSavePost(post)}>
+                    <DeleteForeverSharpIcon />
+                  </IconButton>
+
+                </Box>
+              </header>
               <div className="Post-image">
 
                 <div className="Post-image-bg">
-                
-                {post.Image &&  <img  src={BASE_URL_HTTP+post.Image} onError={(e)=>{isvideo=true;e.target.onerror = null; e.target.src="";}}/>}
-                {/* {post.Image && isvideo && <video  controls >
+
+                  {post.post.Image && <img src={BASE_URL_HTTP + post.post.Image} onError={(e) => { isvideo = true; e.target.onerror = null; e.target.src = ""; }} />}
+                  {/* {post.Image && isvideo && <video  controls >
                 <source src={post.Image} type="video/mp4"  />
                 </video>}
                  */}
                 </div>
 
               </div>
-            <div className="Post-caption">
-            
-       
-            {likedCount[post.id]}&nbsp;
-            
-            <IconButton  className={classes.button}  color={""}>
-            <NavLink to={`/post/${post.id}`} style={{ textDecoration: 'none',cursor:'pointer',color:'black'}}> <Icon><ForumIcon /></Icon></NavLink>
-      </IconButton>
-            <div>Caption:{post.caption}</div>
-            </div>
+              <div className="Post-caption">
 
-          </article>
-          
-        </div>
-        
-      )})
-    
+
+                {post.post.likes}&nbsp;
+
+
+                <div>Caption:{post.post.caption}</div>
+              </div>
+
+            </article>
+
+          </div>
+
+        )
+      })
+
       }
-      {PageCount<totalpageCnt?<CircularProgress style={{marginLeft:'50%'}}/>:<></>}
+      {PageCount < totalpageCnt ? <CircularProgress style={{ marginLeft: '50%' }} /> : <></>}
       <br></br>
 
-      </>
-    )
+    </>
+  )
 
 }

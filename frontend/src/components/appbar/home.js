@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React,{useState,useEffect } from 'react';
-import { NavLink,Link ,useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import clsx from 'clsx';
@@ -40,8 +40,8 @@ import Search from './search';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import People from '../people';
 import Sidebar from '../SideBare/sidebar'
-
-import {BookmarkBorder as BookmarkIcon} from '@material-ui/icons';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import { BookmarkBorder as BookmarkIcon } from '@material-ui/icons';
 
 
 const drawerWidth = 250;
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   appBar2: {
     top: 'auto',
     bottom: 0,
-},
+  },
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -111,216 +111,235 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
-  
 
 
 
-export default function Home({children}) {
-const classes = useStyles();
-const theme = useTheme();
-const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
-const BASE_URL_WS=process.env.REACT_APP_BASE_URL_WS ?process.env.REACT_APP_BASE_URL_WS : "" ;
-const [iconid,setid]=useState();
-const [open, setOpen] = useState(false);
-const [notiCount, setnotiCount] = useState(0);
-const [msgCount, setmsgCount] = useState(0);
-const [messageCount, setmessageCount] = useState(0);
-const [username,setusername]=useState();
-const [profile,setprofile]=useState();
-const [mydata,setmydata] = useState();
-const handleDrawerOpen = () => {
-  setOpen(true);
-};
 
-const handleDrawerClose = () => {
-  setOpen(false);
-};
-const icons = [
-  HomeIcon,
-  PeopleIcon,
-  MessageIcon,
-  NotificationsIcon,
-  AccountCircleIcon,
-  AssignmentTurnedInIcon,
-  ExitToAppIcon,
-];
+export default function Home({ children }) {
+  const classes = useStyles();
+  const theme = useTheme();
+  const BASE_URL_HTTP = process.env.REACT_APP_BASE_URL_HTPP;
+  const BASE_URL_WS = process.env.REACT_APP_BASE_URL_WS ? process.env.REACT_APP_BASE_URL_WS : "";
+  const [iconid, setid] = useState();
+  const [open, setOpen] = useState(false);
+  const [notiCount, setnotiCount] = useState(0);
+  const [msgCount, setmsgCount] = useState(0);
+  const [messageCount, setmessageCount] = useState(0);
+  const [follower, setfollowers] = useState([]);
 
-useEffect(() => {
-  const x=localStorage.getItem('token');
-  axios.get(`${BASE_URL_HTTP}/user/findCurrent`,{
-    headers: {
-        'Authorization': `token ${x}`,  
-      },
-     
-    }).then((res)=>{
-      setmydata(res.data)
-       
-}
-,(error)=>{console.log(error.message,error.response)})
-  const link = `${BASE_URL_WS}/ws/noticount/?authorization=${x}` ;
-  const chatSocket = new WebSocket(link);
-  chatSocket.onmessage = function(e) {
-  var data = JSON.parse(e.data);
-  setusername(data.value.user);
-  setprofile(data.value.profile_pic);
-  setnotiCount(data.value.count)
-  setmessageCount(data.value.message_count)
+
+  const [username, setusername] = useState();
+  const [profile, setprofile] = useState();
+  const [mydata, setmydata] = useState(null);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
-  
-  chatSocket.onclose = function(e) {
-  console.error('Chat socket closed unexpectedly');
 
-};
-}, [setmydata]); 
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const icons = [
+    HomeIcon,
+    PeopleIcon,
+    MessageIcon,
+    NotificationsIcon,
+    AccountCircleIcon,
+    AssignmentTurnedInIcon,
+    ExitToAppIcon,
+  ];
 
+  useEffect(() => {
+    const x = localStorage.getItem('token');
+    axios.get(`${BASE_URL_HTTP}/user/findCurrent`, {
+      headers: {
+        'Authorization': `token ${x}`,
+      },
 
-const changeColor=(idx,s)=>{
-setid(idx)
-setTimeout(function(){
-setid(-1)
-}, 250);
+    }).then((res) => {
+      setmydata(res.data)
+      axios.get(`${BASE_URL_HTTP}/user/followers_followings/${res.data.user_name}`, {
+        headers: {
+          'Authorization': `token ${x}`,
 
+        },
+        params: {
+          type: 'followers',
 
-}
-const logout=()=>{
-  localStorage.removeItem('token');
-  window.location.replace('/login');
-}
+        }
+      }).then((res) => {
+        setfollowers(res.data.followers);
 
-return (
-  
-<div className={classes.root}>
+      })
+    }
+      , (error) => { console.log(error.message, error.response) })
+    const link = `${BASE_URL_WS}/ws/noticount/?authorization=${x}`;
+    const chatSocket = new WebSocket(link);
+    chatSocket.onmessage = function (e) {
+      var data = JSON.parse(e.data);
+      setusername(data.value.user);
+      setprofile(data.value.profile_pic);
+      setnotiCount(data.value.count)
+      setmessageCount(data.value.message_count)
+    };
 
-<CssBaseline />
-<AppBar
-position="fixed"
-className={clsx(classes.appBar, {
-[classes.appBarShift]: open,
-})}
->
-<Toolbar>
-<IconButton
-  color="inherit"
-  aria-label="open drawer"
-  onClick={handleDrawerOpen}
-  edge="start"
-  className={clsx(classes.menuButton, {
-    [classes.hide]: open,
-  })}
->
-  <MenuIcon />
-</IconButton>
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
 
-
-      <Avatar style={{margin:'15px' }}  src={profile} className={classes.large} />
-      <h4 style={{ fontSize: 18,marginTop:'5px',whitespace: 'nowrap',marginRight:'30%'}}>{username}</h4>
-      <Search/>
-      <Button onClick={logout} style={{ fontSize:15,margin:'15px',color:'white',marginLeft:'30%' }}>Logout</Button>
-
-</Toolbar>
-</AppBar>
-
-{/*<Sidebar username={mydata}/>*/}
+    };
+  }, [setmydata]);
 
 
-<Drawer
-variant="permanent"
-className={clsx(classes.drawer, {
-[classes.drawerOpen]: open,
-[classes.drawerClose]: !open,
-})}
-classes={{
-paper: clsx({
-  [classes.drawerOpen]: open,
-  [classes.drawerClose]: !open,
-}),
-}}
->
-<div className={classes.toolbar}>
-<IconButton onClick={handleDrawerClose}>
-  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-</IconButton>
-</div>
-<Divider  style={{ marginTop:'7px'}}/>
-<List>
-<NavLink  to={'/dashboard'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
-<Tooltip title={<h3>{"dashboard"}</h3>}  placement="right">
-<ListItem key={"dashboard"}>
-    <ListItemIcon>
-  <DashboardIcon/>
- </ListItemIcon> 
-</ListItem> 
-  </Tooltip>
-  </NavLink>
-{['Home','Peoples','Messages','Notifications','Profile','Logout'].map((iconnames, idx) => {
-const Icon = icons[idx];
-var url = `/${iconnames.toLowerCase()}`
+  const changeColor = (idx, s) => {
+    setid(idx)
+    setTimeout(function () {
+      setid(-1)
+    }, 250);
 
-if (username&&iconnames=='Profile' || (mydata && mydata.user_name && iconnames=='Profile' )){
-  if(username){
-    url=url+'/'+username
 
   }
-  else {
-    url=url+'/'+mydata.user_name
-
+  const logout = () => {
+    localStorage.removeItem('token');
+    window.location.replace('/login');
   }
-}
-var badgevalue=0;
-if (idx==2){
-  badgevalue=messageCount
-}
-else if(idx==3){
-  badgevalue=notiCount
-}
-return (
-  <span key={idx}>
-<NavLink  to={url} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
-<div>
-<div onClick={()=>{changeColor(idx)}} >
-<Tooltip title={<h3>{iconnames}</h3>}  placement="right">
-  <ListItem key={iconnames}>
-    <ListItemIcon>
-      {idx<4? <Badge badgeContent={badgevalue} color="secondary">
-        <Icon style={{color:iconid===idx?'blue':'#6b6b6b'}} />
-      </Badge>: <Icon style={{color:iconid===idx?'blue':'#6b6b6b'}} />}
-      <ListItemText primary={iconnames} style={{marginLeft:'35px' , color:iconid===idx?'blue':'#6b6b6b' }}/>
-    </ListItemIcon>
-</ListItem>
-</Tooltip>
-</div>
-{idx===3?<Divider />:<></>}
-</div>
-</NavLink >
-</span>
-)
-})}
-<NavLink  to={'/savedPost'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
-<Tooltip title={<h3>{"save post"}</h3>}  placement="right">
-<ListItem key={"BookmarkIcon"}>
-    <ListItemIcon>
-  <BookmarkIcon/>
- </ListItemIcon> 
-</ListItem> 
-  </Tooltip>
-  </NavLink>
-  <NavLink  to={'/groups'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none',cursor:'pointer'}} >
-<Tooltip title={<h3>{"groups"}</h3>}  placement="right">
-<ListItem key={"groups"}>
-    <ListItemIcon>
-  <BookmarkIcon/>
- </ListItemIcon> 
-</ListItem> 
-  </Tooltip>
-  </NavLink>
-</List>
-</Drawer>
+
+  return (
+
+    <div className={classes.root}>
+
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          {mydata && mydata.mypicture && mydata.mypicture.startsWith('/media') ? <Avatar style={{ margin: '15px' }} src={BASE_URL_HTTP + mydata.mypicture} className={classes.large} /> : mydata && mydata.mypicture ? <Avatar src={mydata.mypicture} className={classes.large} /> : ""}
+          <h4 style={{ fontSize: 18, marginTop: '5px', whitespace: 'nowrap', marginRight: '30%' }}>{mydata && mydata.user_name}</h4>
+          <Search />
+          <Button onClick={logout} style={{ fontSize: 15, margin: '15px', color: 'white', marginLeft: '30%' }}>Logout</Button>
+
+        </Toolbar>
+      </AppBar>
+
+      {/*<Sidebar username={mydata}/>*/}
 
 
-<main className={classes.content}>
-<div className={classes.toolbar} />
-<div>{children}</div>
-</main>
-</div>
-);
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+      >
+        <div className={classes.toolbar}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+        <Divider style={{ marginTop: '7px' }} />
+        <List>
+          {follower.length >= 4 && <NavLink to={'/dashboard'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none', cursor: 'pointer' }} >
+            <Tooltip title={<h3>{"dashboard"}</h3>} placement="right">
+              <ListItem key={"dashboard"}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                  <ListItemText primary={"dashboard"} style={{ marginLeft: '35px', color: '#6b6b6b' }}></ListItemText>
+                </ListItemIcon>
+              </ListItem>
+            </Tooltip>
+          </NavLink>}
+          {['Home', 'Peoples', 'Messages', 'Notifications', 'Profile', 'Logout'].map((iconnames, idx) => {
+            const Icon = icons[idx];
+            var url = `/${iconnames.toLowerCase()}`
+
+            if (username && iconnames == 'Profile' || (mydata && mydata.user_name && iconnames == 'Profile')) {
+              if (username) {
+                url = url + '/' + username
+
+              }
+              else {
+                url = url + '/' + mydata.user_name
+
+              }
+            }
+            var badgevalue = 0;
+            if (idx == 2) {
+              badgevalue = messageCount
+            }
+            else if (idx == 3) {
+              badgevalue = notiCount
+            }
+            return (
+              <span key={idx}>
+                <NavLink to={url} replace={true} activeClassName="active-link" style={{ textDecoration: 'none', cursor: 'pointer' }} >
+                  <div>
+                    <div onClick={() => { changeColor(idx) }} >
+                      <Tooltip title={<h3>{iconnames}</h3>} placement="right">
+                        <ListItem key={iconnames}>
+                          <ListItemIcon>
+                            {idx < 4 ? <Badge badgeContent={badgevalue} color="secondary">
+                              <Icon style={{ color: iconid === idx ? 'blue' : '#6b6b6b' }} />
+                            </Badge> : <Icon style={{ color: iconid === idx ? 'blue' : '#6b6b6b' }} />}
+                            <ListItemText primary={iconnames} style={{ marginLeft: '35px', color: iconid === idx ? 'blue' : '#6b6b6b' }} />
+                          </ListItemIcon>
+                        </ListItem>
+                      </Tooltip>
+                    </div>
+                    {idx === 3 ? <Divider /> : <></>}
+                  </div>
+                </NavLink >
+              </span>
+            )
+          })}
+          <NavLink to={'/savedPost'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none', cursor: 'pointer' }} >
+            <Tooltip title={<h3>{"save post"}</h3>} placement="right">
+              <ListItem key={"BookmarkIcon"}>
+                <ListItemIcon>
+                  <BookmarkIcon />
+                  <ListItemText primary={"save post"} style={{ marginLeft: '35px', color: '#6b6b6b' }} ></ListItemText>
+
+                </ListItemIcon>
+              </ListItem>
+            </Tooltip>
+          </NavLink>
+          <NavLink to={'/groups'} replace={true} activeClassName="active-link" style={{ textDecoration: 'none', cursor: 'pointer' }} >
+            <Tooltip title={<h3>{"groups"}</h3>} placement="right">
+              <ListItem key={"groups"}>
+                <ListItemIcon>
+                  <GroupWorkIcon />
+                  <ListItemText primary={"groups"} style={{ marginLeft: '35px', color: '#6b6b6b' }}></ListItemText>
+
+                </ListItemIcon>
+              </ListItem>
+            </Tooltip>
+          </NavLink>
+        </List>
+      </Drawer>
+
+
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <div>{children}</div>
+      </main>
+    </div >
+  );
 }

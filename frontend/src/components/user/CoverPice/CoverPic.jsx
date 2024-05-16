@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Définition du composant CoverPic qui accepte une prop storageKey pour identifier de manière unique le localStorage utilisé.
-const CoverPic = ({ storageKey }) => {
+const CoverPic = ({ storageKey, iscurrentuser }) => {
     // Initialiser coverImage à partir du localStorage en utilisant la clé fournie ou à '' si rien n'est trouvé.
     const [coverImage, setCoverImage] = useState(localStorage.getItem(storageKey) || '');
 
@@ -43,13 +43,13 @@ const CoverPic = ({ storageKey }) => {
                 onChange={handleCoverImageChange}
                 style={{ display: 'none' }}
             />
-            <button
+            {iscurrentuser && <button
                 className="change-cover-button"
                 onClick={() => document.getElementById(inputId).click()}
                 style={{ margin: '10px' }}
             >
                 Modifier la photo de couverture
-            </button>
+            </button>}
         </div>
     );
 };

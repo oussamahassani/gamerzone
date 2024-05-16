@@ -14,6 +14,14 @@ import axios from 'axios';
 import { ReactComponent as Svg } from '../assests/svg/logo2.svg';
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+    background:'linear-gradient( #221860, #070224)'
+  },
+  white:{
+    background:'white',
+    padding:"15px",
+    margin:"15px"
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -93,7 +101,7 @@ export default function Register() {
 
   }
   return (
-    <div style={{ display: 'flex' }} >
+    <div style={{ display: 'flex' }} className={classes.root} >
       {window.innerWidth > 700 && <Svg className={classes.svg} />}
       <div component="main" className='container'>
         <CssBaseline />
@@ -105,7 +113,7 @@ export default function Register() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={`${classes.form} ${classes.white}`} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

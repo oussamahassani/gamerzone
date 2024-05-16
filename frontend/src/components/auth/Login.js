@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
   root:{
     background:'linear-gradient( #221860, #070224)'
   },
+  white:{
+    background:'white',
+    padding:"15px",
+    margin:"15px"
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -131,7 +136,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={`${classes.form} ${classes.white}`} noValidate>
             <TextField
               variant="outlined"
               margin="normal"

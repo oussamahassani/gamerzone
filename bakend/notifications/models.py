@@ -12,7 +12,7 @@ import timeago
 User=settings.AUTH_USER_MODEL
 # Create your models here.
 class Notification(models.Model):
-	NOTIFICATION_TYPES = ((1,'Like'),(2,'Comment'), (3,'Follow'))
+	NOTIFICATION_TYPES = ((1,'Like'),(2,'Comment'), (3,'Follow'),(4,'Groups'))
 
 	post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, related_name="noti_post", blank=True, null=True)
 	sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="noti_from_user" ,  blank=True, null=True)
@@ -59,7 +59,7 @@ class Notification(models.Model):
 		channel_layer = get_channel_layer()
 		count=Notification.objects.filter(is_seen=False,user=instance.user).count()
 		message_count=RecentChat.objects.filter(receiver=instance.user,is_seen=False).count()
-		data={'message_count':message_count,'count':count,'user':instance.user.user_name,'profile_pic':instance.user.picture}
+		data={'message_count':message_count,'count':count,'user':instance.user.user_name,'profile_pic':instance.user.mypicture}
 		room_name="notif_room_for_user_"+str(instance.user.id)
 		async_to_sync(channel_layer.group_send)(
 			 room_name,{

@@ -51,6 +51,7 @@ export default function Chat(params) {
         var data = JSON.parse(e.data);
         //setMessages(data.value.messages);
         if(data.value.messages.length>0){
+          console.log("data.value.messages",data.value.messages)
         }
         else
         {

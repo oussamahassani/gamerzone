@@ -4,6 +4,9 @@ from datetime import date
 from collections import defaultdict
 from posts.models import Post
 from .models import User
+from users.models import Follow
+from users.serializers import CustomUserSerializer,CustomFollowSerializer
+
 from rest_framework.permissions import IsAuthenticated
 from datetime import timedelta
 from story.models import Story
@@ -31,7 +34,7 @@ def calculate_age_group(age):
         return '70+'
 
 @api_view(['GET'])
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 
 def dashboard(request):
     today = date.today()
@@ -48,27 +51,29 @@ def dashboard(request):
         'Tunis', 'Sfax', 'Sousse', 'Kairouan', 'Bizerte', 'Gabès', 'Ariana', 'Gafsa',
         'La Marsa', 'Hammamet', 'Monastir', 'Nabeul', 'Tataouine', 'Mahdia', 'Jendouba',
         'Beja', 'Kasserine', 'Tozeur', 'Medenine', 'Siliana', 'Zaghouan', 'Kebili', 
-        'Grombalia', 'Djerba'
+        'Grombalia', 'Djerba' , 'Sidi Bouzid'
     ]
     
-    for user in User.objects.all():
-#age     
-        #birthday_date = datetime.strptime(user.birthday, '%Y-%m-%d').date()
+    userconnected = request.user
 
-        #age = (today - birthday_date).days // 365 if user.birthday else None 
-        #if age is not None:
-         #   age_group = calculate_age_group(age)          
-         #   age_groups[age_group] += 1
+    followers_obj=Follow.objects.filter(following=userconnected)
+    data=[]
+    for i in followers_obj:
+        data.append(CustomUserSerializer( i.follower).data)
 
-#location        
-        location = user.location
+    for user in followers_obj:
+        location = user.follower.location
         if location in tunisia_cities:
-            traffic_by_location[location] += 1
-            
-#gender
-        gender = user.gender
+            # Increment traffic count for the corresponding location
+            traffic_by_location[location] = traffic_by_location.get(location, 0) + 1
+
+        # Gender
+        gender = user.follower.gender
         if gender:
-            traffic_by_gender[gender] += 1
+            # Increment traffic count for the corresponding gender
+            traffic_by_gender[gender] = traffic_by_gender.get(gender, 0) + 1
+
+
 
 
  
@@ -101,14 +106,17 @@ def dashboard(request):
 
 
     # Retrieve counts of users created each month and year
-    user_counts = User.objects.annotate(
+
+    user_counts = User.objects.filter(
+        follower__in=followers_obj
+    ).annotate(
         year=models.functions.ExtractYear('created'),
         month=models.functions.ExtractMonth('created')
     ).values('year', 'month').annotate(count=Count('id')).order_by('year', 'month')
 
-  
-    post_count = Post.objects.count()
-    user_count = User.objects.count()
+
+    post_count = Post.objects.filter(user=userconnected.id).count()
+    user_count = Follow.objects.filter(following=userconnected).count()
 # Count all rows in the User model
     
     data = {
@@ -119,7 +127,7 @@ def dashboard(request):
         #'week_story_count': week_story_count,
         'user_counts':user_counts,
 		'post_count':post_count,
-		'user_count':user_count
+		'user_count':user_count,
  
     }
 

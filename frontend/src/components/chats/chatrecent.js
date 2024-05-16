@@ -106,7 +106,7 @@ export default function ChatsRecent() {
           var data = JSON.parse(e.data);
           var user=data.user;
           data=data.value.recent_message;
-
+          console.log("message" , data)
 
           if(showchatid.current==data.sender|| data.sender==user){
             setisSeen((prevPersonInfo) => ({...prevPersonInfo, [data.room_name]: 1})) 

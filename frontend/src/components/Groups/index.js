@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import Button from '@material-ui/core/Button';
 import AddGroup from "./actions/add_group";
+import GroupLayout from "./Group_layout"
 export default function Post() {
     const BASE_URL_HTTP = process.env.REACT_APP_BASE_URL_HTPP;
     const parameters = {
@@ -20,7 +21,7 @@ export default function Post() {
 
             </div>        {OpenAddPost && <AddGroup open={OpenAddPost} onClose={handleCloseAddPost} />}
 
-
+            <GroupLayout />
         </>
     )
 
