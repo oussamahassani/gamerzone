@@ -6,7 +6,7 @@ from users.models import User
 class Story(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text_content = models.TextField(blank=True)
-    media_file = models.FileField(upload_to='media/story/',blank=False)
+    media_file = models.ImageField(upload_to='media/story/',blank=False)
     created_at = models.DateTimeField(default=timezone.now)
     class Meta:
         db_table = 'story'

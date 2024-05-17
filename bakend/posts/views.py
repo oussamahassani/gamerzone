@@ -7,6 +7,9 @@ from users.models import Follow
 from posts.serializers import PostSerializer,LikeSerializer
 from comments.serializers import CommentSerializer
 from .models import Likes, Post
+from story.models import Story 
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import render
 from rest_framework import generics,pagination
 from rest_framework.authentication import TokenAuthentication
@@ -16,6 +19,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
+from story.serializers import StorySerializer, StorySerializer_GET
 
 class posts_particularUser(APIView):
     authentication_classes=[TokenAuthentication]
@@ -28,6 +32,7 @@ class posts_particularUser(APIView):
         typ=request.query_params['type']
         user=request.user
         posts_data=[]
+        story_data=[]
         likeDict={}
         page_number = request.GET.get('page') or '0'
         if(typ=='profile'):
@@ -52,17 +57,21 @@ class posts_particularUser(APIView):
                 people_obj.append(i.following)
             
             posts_obj=Post.objects.filter(user__in=people_obj)
-            
+            twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
+            stories = Story.objects.filter(user__in=people_obj ,  created_at__gte=twenty_four_hours_ago)
             paginator = Paginator(posts_obj, 4)
             posts_obj = paginator.get_page(page_number)
             likeDict={}
             for i in posts_obj:
                 posts_data.append(PostSerializer(i).data)
+               
                 try:
                     tp=Likes.objects.get(user=user,post=i.id)
                     likeDict[i.id]=1
                 except:
                     continue
+            for i in stories:
+                story_data.append(StorySerializer(i).data)
         pageCnt=posts_obj.paginator.num_pages
         if pageCnt<int(page_number):
             return Response('No more posts',status=404)
@@ -77,6 +86,7 @@ class posts_particularUser(APIView):
             'pageCnt':pageCnt,
             'isCurrenUser':request.user==user,
             'userphoto' : user.mypicture,
+            'story_data':story_data
             },
             status=200)
     def post(self,request,format=None,*args,**kwargs):

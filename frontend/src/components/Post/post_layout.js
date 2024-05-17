@@ -9,12 +9,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import axios from "axios";
-
 import Icon from '@material-ui/core/Icon';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Avatar, Card, CardActions, CardContent, CardHeader, Paper, Typography } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ForumIcon from '@material-ui/icons/Forum';
+import AllUserStory from './story/allUserStory'
 
 import Box from '@material-ui/core/Box';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -49,9 +49,11 @@ export default function PostLayout(props) {
   const [isLiked, setisLiked] = useState({});
   const [likedCount, setlikedCount] = useState({});
   const [PageCount, setPageCount] = useState(1);
+  const [strorydata, setStoryData] = useState([])
   const [totalpageCnt, settotalpageCnt] = useState(PageCount + 1);
   const x = localStorage.getItem('token');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [mydata, setmydata] = useState(null)
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -119,7 +121,16 @@ export default function PostLayout(props) {
       passive: true
     });
 
+    const x = localStorage.getItem('token');
+    axios.get(`${BASE_URL_HTTP}/user/findCurrent`, {
+      headers: {
+        'Authorization': `token ${x}`,
+      },
 
+    }).then((res) => {
+      setmydata(res.data)
+
+    })
 
     axios.get(url, {
       headers: {
@@ -135,8 +146,8 @@ export default function PostLayout(props) {
       setPosts(
         res.data.posts_data,
       );
-
-
+      setStoryData(res.data.story_data)
+      console.log(res.data.story_data)
       settotalpageCnt(res.data.pageCnt);
       setisLiked(Object.assign({}, isLiked, res.data.likeDict))
       // setisLiked(res.data.likeDict);
@@ -159,7 +170,7 @@ export default function PostLayout(props) {
 
   return (
     <>
-
+      <AllUserStory story_data={strorydata} userdata={mydata} />
 
       {Posts && Posts.map((post, index) => {
         var isvideo = true;

@@ -24,7 +24,8 @@ class StoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
     def get(self, request):
-        stories = Story.objects.filter(user=request.user)
+        twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
+        stories = Story.objects.filter(user=request.user ,  created__gte=twenty_four_hours_ago)
         serializer = StorySerializer_GET(stories, many=True)
         return Response(serializer.data)
     
