@@ -35,6 +35,9 @@ export default function Profile() {
     const [iscurrentuser, setiscurrentuser] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [OpenAddPost, setOpenAddPost] = useState(false);
+    const [mydata, setMydata] = useState(null);
+
+    
     const classes = useStyles();
     const parameters = {
         type: 'profile',
@@ -55,6 +58,19 @@ export default function Profile() {
             setiscurrentuser(res.data.isCurrenUser)
         }
             , (error) => { console.log(error.message, error.response) })
+
+            axios.get(`${BASE_URL_HTTP}/user/findCurrent`,{
+                headers: {
+                    'Authorization': `token ${x}`,
+                    
+                  },
+                 
+                }).then((res)=>{
+                  setMydata(res.data)
+    })
+      
+                
+            
     }, [])
 
     const handleClickOpen = () => {
@@ -81,7 +97,7 @@ export default function Profile() {
         <>
 
             <div>
-                <CoverPic iscurrentuser={iscurrentuser} />
+                <CoverPic iscurrentuser={iscurrentuser} mydata={mydata}/>
                 {userphoto && userphoto.startsWith('/media') ? <Avatar src={BASE_URL_HTTP + userphoto} /> : <Avatar src={userphoto} />}
                 <h2>{username}</h2>
                 <div className={classes.follow_following_div}>

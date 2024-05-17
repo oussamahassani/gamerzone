@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import axios from "axios";
 
 // Définition du composant CoverPic qui accepte une prop storageKey pour identifier de manière unique le localStorage utilisé.
-const CoverPic = ({ storageKey, iscurrentuser }) => {
+const CoverPic = (props,{ storageKey }) => {
     // Initialiser coverImage à partir du localStorage en utilisant la clé fournie ou à '' si rien n'est trouvé.
-    const [coverImage, setCoverImage] = useState(localStorage.getItem(storageKey) || '');
+    const [coverImage, setCoverImage] = useState(props.mydata ? props.mydata.photo_couv:"" );
+    const BASE_URL_HTTP=process.env.REACT_APP_BASE_URL_HTPP;
+    const x = localStorage.getItem('token')
 
     // Gestionnaire d'événements pour le changement de l'image de couverture
     const handleCoverImageChange = (e) => {
@@ -19,21 +22,49 @@ const CoverPic = ({ storageKey, iscurrentuser }) => {
         if (file) {
             reader.readAsDataURL(file); // Lire le fichier comme une URL de données
         }
-    };
+        let formData = new FormData();	
+       
+        formData.append('Image', null);
 
+        formData.append('first_name', props.mydata.first_name);
+        formData.append('last_name', props.mydata.last_name);
+        formData.append('birthday',  props.mydata.birthday);
+        formData.append('location',  props.mydata.location);
+        formData.append('photo_couv',  file);
+       
+
+    
+      
+      axios.put(`${BASE_URL_HTTP}/user/register`,
+          formData
+      , {
+          headers: {
+            'Authorization': `token ${x}`,
+            'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryGNvWKJmmcVAPkS3a',
+            accept: 'application/json',
+          },
+         
+        }).then((res)=>{
+          window.location.reload();
+
+      },(error)=>{console.log(error.message,error.response)})
+    };
+let covert  = props.mydata &&  props.mydata.photo_couv ? BASE_URL_HTTP + props.mydata.photo_couv : coverImage
+console.log("users" ,  props.mydata.photo_couv)
+console.log("coverImage" ,  coverImage )
+console.log(covert)
     // Style pour le conteneur de l'image de couverture
     const coverStyle = {
         background: '#D7D9F9',
         height: '315px',
         width: '815px',
-        backgroundImage: `url(${coverImage})`,
+        backgroundImage: `url(${covert})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
     };
 
     // ID unique pour l'input de fichier basé sur la storageKey
     const inputId = `cover-image-input-${storageKey}`;
-
     return (
         <div className="profile-cover" style={coverStyle}>
             <input
@@ -43,7 +74,7 @@ const CoverPic = ({ storageKey, iscurrentuser }) => {
                 onChange={handleCoverImageChange}
                 style={{ display: 'none' }}
             />
-            {iscurrentuser && <button
+            {props.iscurrentuser && <button
                 className="change-cover-button"
                 onClick={() => document.getElementById(inputId).click()}
                 style={{ margin: '10px' }}

@@ -44,7 +44,8 @@ class CreateUserAPIView(generics.ListCreateAPIView):
         last_name = request.data.get('last_name', '')
         birthday = request.data.get('birthday', '')
         location = request.data.get('birthday', '')
-       
+        photo_couv = request.data.get('photo_couv', '')
+
         if(request.data['Image'] and  request.data['Image'] is not None and  request.data['Image'] != 'null'):
             user._picture=request.data['Image']
         if(first_name is not None and first_name != ''):
@@ -55,6 +56,8 @@ class CreateUserAPIView(generics.ListCreateAPIView):
             user.birthday = request.data['birthday']
         if(location is not None and location != ''):
             user.location = request.data['location']
+        if(location is not None and photo_couv != ''):
+            user.photo_couv = request.data['photo_couv']
       #  if(request.data['password']):
       #     user.set_password(request.data['password'])
         user.save()
